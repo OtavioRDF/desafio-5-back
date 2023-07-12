@@ -1,32 +1,30 @@
 package br.com.banco.Model;
 
 import lombok.Data;
-import lombok.Generated;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data
 @Entity
+@Table(name = "transferencia")
 public class Transferencia {
     @Id
-    @Column(nullable = false)
-    private long id;
+    private Long id;
 
-    @Column(nullable = false)
-    private Date dataTransferencia;
+    @Column(name = "data_transferencia", nullable = false)
+    private OffsetDateTime dataTransferencia;
 
-    @Column(nullable = false)
-    private double valor;
+    @Column(nullable = false, precision = 20, scale = 2)
+    private float valor;
 
     @Column(nullable = false)
     private String tipo;
 
-    @Column
+    @Column(name = "nome_operador_transacao")
     private String nomeOperadorTransacao;
 
-    @OneToOne
-    @JoinColumn(name = "conta_id")
-    private Transferencia contaId;
+    @ManyToOne
+    @JoinColumn(name = "conta_id", nullable = false)
+    private Conta conta;
 }

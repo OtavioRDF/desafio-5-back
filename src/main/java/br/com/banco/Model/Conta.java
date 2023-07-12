@@ -7,12 +7,12 @@ import java.util.Date;
 
 @Data
 @Entity
+@Table(name = "conta")
 public class Conta {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "id_conta")
-    private long idConta;
+    @Column(name = "id_conta")
+    private Long idConta;
 
-    @Column(nullable = false)
+    @Column(name = "nome_responsavel", nullable = false)
     private String nomeResponsavel;
 }
