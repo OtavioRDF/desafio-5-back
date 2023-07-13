@@ -1,4 +1,4 @@
-package br.com.banco.model;
+package br.com.banco.models;
 
 import lombok.Data;
 import javax.persistence.*;
@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 
 @Data
 @Entity
-@Table(name = "transferencia")
 public class Transferencia {
     @Id
     private Long id;

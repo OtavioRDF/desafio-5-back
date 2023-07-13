@@ -1,4 +1,4 @@
-package br.com.banco.model;
+package br.com.banco.models;
 
 import lombok.Data;
 
@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "conta")
 public class Conta {
     @Id
     private Long idConta;

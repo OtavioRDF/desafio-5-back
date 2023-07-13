@@ -1,6 +1,6 @@
-package br.com.banco.repository;
+package br.com.banco.repositorys;
 
-import br.com.banco.model.Conta;
+import br.com.banco.models.Conta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
