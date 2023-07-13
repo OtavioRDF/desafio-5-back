@@ -1,9 +1,8 @@
-package br.com.banco.Model;
+package br.com.banco.model;
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @Entity

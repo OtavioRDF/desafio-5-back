@@ -1,15 +1,15 @@
-package br.com.banco.Model;
+package br.com.banco.model;
 
 import lombok.Data;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "transferencia")
 public class Transferencia {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "data_transferencia", nullable = false)
