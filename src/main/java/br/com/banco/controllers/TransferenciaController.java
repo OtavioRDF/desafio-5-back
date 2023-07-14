@@ -9,7 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -25,8 +26,8 @@ public class TransferenciaController {
     @GetMapping(value = "/transferencias/{id_conta}")
     public ResponseEntity<List<Transferencia>> transferencias(
             @PathVariable("id_conta") Long idConta,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dataInicio,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dataFinal,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String dataInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String dataFinal,
             @RequestParam(required = false) String nomeOperadorTransacao
 
     ){
@@ -37,12 +38,19 @@ public class TransferenciaController {
             conta = contaRepository.findById(idConta).orElse(null);
 
             if (dataInicio != null && dataFinal != null && nomeOperadorTransacao != null){
-                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetweenAndNomeOperadorTransacao(conta, dataInicio, dataFinal, nomeOperadorTransacao);
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate dataInicioLocalDate = LocalDate.parse(dataInicio, dateFormatter);
+                LocalDate dataFinalLocalDate = LocalDate.parse(dataFinal, dateFormatter);
+
+                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetweenAndNomeOperadorTransacao(conta, dataInicioLocalDate, dataFinalLocalDate, nomeOperadorTransacao);
                 return ResponseEntity.ok(transferencias);
             }
 
-            else if (dataInicio != null && dataFinal != null) {
-                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetween(conta, dataInicio, dataFinal);
+           else if (dataInicio != null && dataFinal != null) {
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate dataInicioLocalDate = LocalDate.parse(dataInicio, dateFormatter);
+                LocalDate dataFinalLocalDate = LocalDate.parse(dataFinal, dateFormatter);
+                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetween(conta, dataInicioLocalDate, dataFinalLocalDate);
                 return ResponseEntity.ok(transferencias);
             }
 
