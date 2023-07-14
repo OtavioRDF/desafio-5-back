@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 public class Conta {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idConta;
 
     private String nomeResponsavel;

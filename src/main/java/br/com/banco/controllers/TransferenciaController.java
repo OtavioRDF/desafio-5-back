@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,8 +25,8 @@ public class TransferenciaController {
     @GetMapping(value = "/transferencias/{id_conta}")
     public ResponseEntity<List<Transferencia>> transferencias(
             @PathVariable("id_conta") Long idConta,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime dataInicio,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime dataFinal,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dataInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dataFinal,
             @RequestParam(required = false) String nomeOperadorTransacao
 
     ){
