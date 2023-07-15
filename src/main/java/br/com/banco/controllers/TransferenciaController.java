@@ -1,16 +1,13 @@
 package br.com.banco.controllers;
 
-import br.com.banco.models.Conta;
-import br.com.banco.models.Transferencia;
-import br.com.banco.repositorys.ContaRepository;
-import br.com.banco.repositorys.TransferenciaRepository;
+import br.com.banco.response.TransferenciaResponseDTO;
+import br.com.banco.services.TransferenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -18,53 +15,44 @@ import java.util.List;
 public class TransferenciaController {
 
     @Autowired
-    private TransferenciaRepository transferenciaRepository;
-
-    @Autowired
-    private ContaRepository contaRepository;
+    private TransferenciaService service;
 
     @GetMapping(value = "/transferencias/{id_conta}")
-    public ResponseEntity<List<Transferencia>> transferencias(
+    public ResponseEntity<List<TransferenciaResponseDTO>> transferencias(
             @PathVariable("id_conta") Long idConta,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String dataInicio,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String dataFinal,
             @RequestParam(required = false) String nomeOperadorTransacao
 
     ){
-        List<Transferencia> transferencias;
-        Conta conta;
+        List<TransferenciaResponseDTO> response;
 
         if(idConta != null){
-            conta = contaRepository.findById(idConta).orElse(null);
 
             if (dataInicio != null && dataFinal != null && nomeOperadorTransacao != null){
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate dataInicioLocalDate = LocalDate.parse(dataInicio, dateFormatter);
-                LocalDate dataFinalLocalDate = LocalDate.parse(dataFinal, dateFormatter);
+                response = service.findByAllArgs(idConta, dataInicio, dataFinal, nomeOperadorTransacao);
 
-                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetweenAndNomeOperadorTransacao(conta, dataInicioLocalDate, dataFinalLocalDate, nomeOperadorTransacao);
-                return ResponseEntity.ok(transferencias);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
 
            else if (dataInicio != null && dataFinal != null) {
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate dataInicioLocalDate = LocalDate.parse(dataInicio, dateFormatter);
-                LocalDate dataFinalLocalDate = LocalDate.parse(dataFinal, dateFormatter);
-                transferencias = transferenciaRepository.findByContaAndDataTransferenciaBetween(conta, dataInicioLocalDate, dataFinalLocalDate);
-                return ResponseEntity.ok(transferencias);
+                response = service.findByDateBetween(idConta, dataInicio, dataFinal);
+
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+
             }
 
             if(nomeOperadorTransacao != null){
-                transferencias = transferenciaRepository.findByContaAndNomeOperadorTransacao(conta, nomeOperadorTransacao);
-                return ResponseEntity.ok(transferencias);
+                response = service.findByNome(idConta,nomeOperadorTransacao);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
 
-            return ResponseEntity.ok(transferenciaRepository.findByConta(conta));
+            return ResponseEntity.ok(service.findByConta(idConta));
         }
 
         return ResponseEntity.notFound().build();
     }
-
 }
+
 
 

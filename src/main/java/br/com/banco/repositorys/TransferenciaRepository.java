@@ -3,6 +3,7 @@ package br.com.banco.repositorys;
 import br.com.banco.models.Conta;
 import br.com.banco.models.Transferencia;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -15,4 +16,7 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
     List<Transferencia> findByContaAndNomeOperadorTransacao(Conta conta, String nomeOperador);
 
     List<Transferencia> findByConta(Conta conta);
+
+    @Query("SELECT SUM(t.valor) FROM Transferencia t WHERE t.conta.idConta = :idConta")
+    Float selectValor(Long idConta);
 }
